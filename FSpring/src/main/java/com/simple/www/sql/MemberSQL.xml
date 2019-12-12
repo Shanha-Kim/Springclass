@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+			PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+			
+<!--
+ 
+	xml 파일의 구조
+		1. [필수] 	첫번째 줄에는 반드시 헤더가 존재해야 한다.
+			<?xml version="1.0" encoding="UTF-8" ?>
+		2. [선택]		DTD파일이나 스키마 파일을 선언한다. (day04.txt 파일 참고 )
+		3. [필수]		xml 파일은 반드시 단하나의 루트 태그를 가져야 한다.
+					루트 태그는 사용하는 스키마나 DTD 에서 정해놓은 것만 사용할 수 있다.
+ 
+-->
+<!--
+ 
+	namespace 란?
+		이 파일과 같은 질의명령을 작성해 놓은 xml 파일이 여러개 존재할 경우
+		각각의 질의 명령은 구분이 되어야 할 것이고
+		그보다 먼저 각각의 문서가 구분이 되어야 할 것이다.
+		그때 각 문서를 구분할 목적으로 별칭을 부여하는 방법이 루트 태그에 namespace 속성을 부여하는 것이다.
+		
+		***
+		각각의 SQL xml 파일마다 namespace 값은 모두 달라야 할 것이다.
+		
+		지정하는 방법
+			1. 일반 문자로 지정하는 방법
+				==> mSQL
+				
+			2. 패키지 형태로 지정하는 방법
+				==> com.simple.member.???.???
+-->
+<mapper namespace="mSQL">
+	
+	<select id="ShowId" resultType="mVO">
+		SELECT
+			m_id id, m_join joinDate
+		FROM
+			member
+	</select>
+	
+	<select id="ShowName" parameterType="mVO" resultType="String">
+		SELECT
+			m_name
+		FROM
+			member
+		WHERE
+			m_no = #{mno}
+	</select>
+	<select id="Login" parameterType="mVO" resultType="int">
+		SELECT
+			count(*) cnt
+		FROM
+			member
+		WHERE
+			m_id = #{id}
+			AND m_pw = #{pw}
+	</select>
+	<select id="IdCount"  parameterType="mVO" resultType="int">
+		SELECT
+			count(*) cnt
+		FROM
+			member
+		WHERE
+			m_id = #{id}
+	
+	</select>
+	
+	<insert id="Join" parameterType="mVO" >
+		INSERT INTO 
+			member 
+		VALUES(
+			(SELECT NVL(MAX(m_no) + 1, 1001) FROM member), '${id}', '${pw}', '${name}', '${mail}', '${tel}', sysdate
+				)
+	</insert>
+</mapper>

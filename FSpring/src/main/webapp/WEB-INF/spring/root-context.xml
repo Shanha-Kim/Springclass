@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	
+	xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<context:annotation-config/>
+	<!--
+		annotation-config 태그는 기본xml에서 제공하지 않는 태그이다.
+		이런 태그를 사용하기 위해서는 context라는 스키마를 사용하겠다고 선언해줘야한다.
+		
+		1. 스키마 사용선언을 해준다
+		2.  
+		
+		예] 
+			<bean id="boardDAO" class="com.simple.www.BoardDAO" />
+			
+		
+	 -->
+	
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl" />
+		<property name="username" value="koitt" />
+		<property name="password" value="koitt" />
+		<property name="maxActive" value="8" />
+	</bean>
+	<!-- mybatis 환경설정, SqlSession -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="configLocation" value="classpath:/resources/mybatis-config.xml"/>
+	</bean>
+		<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory"/>
+	</bean>
+	
+<!-- 	<bean id="boardDAO" class="com.simple.www.BoardDAO" /> -->
+	
+	
+</beans>
