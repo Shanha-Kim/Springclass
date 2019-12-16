@@ -36,5 +36,15 @@ public class MemberDAO {
 		return ids;
 	}
 	
+	public MemberVO membInfo(String id) {
+		MemberVO vo = sqlSession.selectOne("mSQL.MembInfo", id);
+		return vo;
+	}
+	
+	public int editInfo(MemberVO vo) {
+		int cnt = sqlSession.selectOne("mSQL.MembInfo", vo);
+		return cnt;
+	}
+	
 	
 }

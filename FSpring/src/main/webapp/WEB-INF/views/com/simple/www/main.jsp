@@ -22,6 +22,9 @@
 		$('#logout').click(function(){
 			$(location).attr('href', '/www/member/logout.van');
 		});
+		$('#gboard').click(function(){
+			$(location).attr('href', '/www/gboard/gboard.van');
+		});
 		
 		/* 회원 정보보기 비동기 처리 */
 		$('#memberInfo').click(function(){
@@ -34,29 +37,32 @@
 			// 해당 태그에 적용시켜주면 된다.
 			
 			$.ajax({
-				url : "/member/membInfo.ck",
+				url : "/www/member/membInfo.van",
 				type : "post",
 				dataType : "json",
 				data : {
-					mid : tid
+					"id" : tid
 				},
 				success : function(data){
 					alert("success");
+					console.log(data.name);
 					$('#mno').html(data.mno);
-					$('#mid').html(data.mid);
-					$('#mname').html(data.mname);
-					$('#mmail').html(data.mmail);
-					$('#mtel').html(data.mtel);
-					$('#mdate').html(data.mdate);
+					$('#mid').html(data.id);
+					$('#mpw').html(data.pw);
+					$('#mname').html(data.name);
+					$('#mmail').html(data.mail);
+					$('#mtel').html(data.tel);
+					$('#mdate').html(data.sDate);
 					$('#detail').css('display', 'block');
 					
 					$('#infoEdit').click(function(){
 						$('#no').html(data.mno);
-						$('#id').html(data.mid);
-						$('#name').html(data.mname);
-						$('#mail').val(data.mmail);
-						$('#tel').val(data.mtel);
-						$('#date').html(data.mdate);
+						$('#id').html(data.id);
+						$('#pw').html(data.pw);
+						$('#name').html(data.name);
+						$('#mail').val(data.mail);
+						$('#tel').val(data.tel);
+						$('#date').html(data.sDate);
 						$('#detail').css('display', 'none');
 						$('#edit').css('display', 'block');			
 					});
@@ -75,33 +81,22 @@
 			var tel1 = $('#mtel').text();
 			var tel2 = $('#tel').val();
 			var no = $('#no').text();
-			var code = 1;
 			
 			if(mail1 == mail2 && tel1 == tel2){
 				return;
-			} else if(mail1 == mail2){
-				// 전화번호만 수정한 경우
-				code = 3;
-			} else if(tel1 == tel2){
-				// 메일만 수정한 경우
-				code = 2;
-			} else {
-				// 전화번호와 메일 둘다 수정한 경우
-				code = 1;
 			}
 			
 			$.ajax({
-				url : "/member/infoEdit.ck",
+				url : "/www/member/infoEdit.van",
 				type: "post",
 				dataType: "json",
 				data : {
 					"mno" : no,
 					"mail" : mail2,
 					"tel" : tel2,
-					"code" : code
 				},
 				success : function(data){
-					if(data.cnt == 1){
+					if(data == 1){
 						$('#edit').css('display', 'none');
 						alert('회원 정보가 수정 되었습니다.');
 					} else {
@@ -176,6 +171,7 @@
 			</c:if>
 			<c:if test="${not empty SID}">
 				<div class="w3-col m2 w3-pink w3-button" id="logout">로그아웃</div>
+				<div class="w3-col m2 w3-brown w3-button" id="gboard">방명록</div>
 				<div class="w3-col m2 w3-deep-purple w3-button" id="memberInfo">회원정보보기</div>
 				<!-- <div class="w3-col m2 w3-indigo w3-button" id="memberEdit">회원정보수정</div> -->
 				<div class="w3-col m2 w3-aqua w3-button" id="boardList">파일업로드게시판</div>
@@ -200,6 +196,10 @@
 				<div class="w3-col w3-border-bottom">
 					<h5 class="w3-col m3 w3-right-align">아 이 디 : </h5>
 					<h5 class="w3-col m9 w3-center" id="mid"></h5>
+				</div>
+				<div class="w3-col w3-border-bottom">
+					<h5 class="w3-col m3 w3-right-align">비밀번호 : </h5>
+					<h5 class="w3-col m9 w3-center" id="mpw"></h5>
 				</div>
 				<div class="w3-col w3-border-bottom">
 					<h5 class="w3-col m3 w3-right-align">회원이름 : </h5>

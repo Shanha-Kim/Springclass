@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+			PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+			
+<mapper namespace="gSQL">
+	
+	<select id="GBoardList" resultType="gVO">
+		SELECT
+			g_no gno, g_id gid, g_body gbody, g_date sDate
+		FROM
+			guestBoard
+	</select>
+	
+	<insert id="GBoardWrite" parameterType="gVO" >
+		<selectKey keyProperty="gno" resultType="int" order="BEFORE">
+			SELECT NVL(MAX(m_no) + 1, 1001) FROM member 
+		</selectKey>
+		INSERT INTO 
+			guestBoard 
+			SELECT
+				#{gno}, #{gid}, #{gbody}, sysdate
+			FROM dual 
+			WHERE NOT EXISTS(select g_no from guestboard WHERE g_id = #{gid})
+	</insert>
+
+</mapper>
+
+

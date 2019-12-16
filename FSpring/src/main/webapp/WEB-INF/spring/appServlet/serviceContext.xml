@@ -9,7 +9,5 @@
 		http://www.springframework.org/schema/beans 
 		https://www.springframework.org/schema/beans/spring-beans.xsd">
 	
-	<beans:bean id="mDAO" class="com.simple.www.dao.MemberDAO"/>
-	<beans:bean id="gDAO" class="com.simple.www.dao.GBoardDAO"/>
-	<beans:bean id="fileDown" class="com.simple.www.util.DownloadUtil" />
+	<beans:bean id="fileSrvc" class="com.simple.www.services.FileService"/>
 </beans:beans>

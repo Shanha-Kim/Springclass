@@ -36,6 +36,7 @@
 -->
 <typeAliases>
 <typeAlias alias="mVO" type="com.simple.www.vo.MemberVO"/>
+<typeAlias alias="gVO" type="com.simple.www.vo.GBoardVO"/>
 </typeAliases>
 <!--  mybatis에서 사용할 질의명령문서 추가  -->
 <!--
@@ -53,5 +54,6 @@
 -->
 <mappers>
 <mapper resource="com/simple/www/sql/MemberSQL.xml"/>
+<mapper resource="com/simple/www/sql/GBoardSQL.xml"/>
 </mappers>
 </configuration>

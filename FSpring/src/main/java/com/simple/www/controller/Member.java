@@ -9,10 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.simple.www.dao.MemberDAO;
+import com.simple.www.services.FileService;
 import com.simple.www.vo.*;
 
 @Controller
@@ -20,6 +22,8 @@ import com.simple.www.vo.*;
 public class Member {
 	@Autowired
 	MemberDAO mDAO;
+	@Autowired
+	FileService fileSrvc;
 	
 	@RequestMapping("login.van")
 	public ModelAndView loginForm(ModelAndView mv) {
@@ -38,6 +42,7 @@ public class Member {
 			mv.setView(rv);
 		}else {
 			rv.setUrl("/www/member/login.van");
+			mv.setView(rv);
 		}
 		return mv;
 	}
@@ -48,11 +53,22 @@ public class Member {
 		return mv;
 	}
 	
+	@RequestMapping("membInfo.van")
+	@ResponseBody
+	public MemberVO membInfo(String id) {
+		MemberVO vo = mDAO.membInfo(id);
+		return vo;
+	}
+	@RequestMapping("infoEdit.van")
+	@ResponseBody
+	public int editInfo(MemberVO vo) {
+		int cnt = mDAO.editInfo(vo);
+		return cnt;
+	}
+	
 	@RequestMapping("joinProc.van")
 	public ModelAndView joinProc(ModelAndView mv, MemberVO vo, 
 			HttpSession session, RedirectView rv) {
-		System.out.println(vo.getId());
-		System.out.println(vo.getMail());
 		int cnt = mDAO.joinProc(vo);
 		if(cnt>0) {
 			rv.setUrl("/www/member/login.van");
@@ -93,6 +109,11 @@ public class Member {
 		String name = mDAO.showName(vo);
 		
 		return name;
+	}
+	
+	@RequestMapping("fileUp.van")
+	public void fileUp(MultipartFile upfile, HttpSession session) {
+		fileSrvc.singleUpProc(session, upfile);
 	}
 	
 }
